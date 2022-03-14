@@ -14,4 +14,42 @@ package baekjoon.solution2920
  */
 
 fun main() {
+    val s = readLine()?.split(" ")?.map {
+        it.toInt()
+    }
+    if (s != null) {
+        print(solution2(s))
+    }
+}
+fun solution1(s: List<Int>) {
+    val ascendingList = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8)
+    val descendingList = listOf<Int>(8, 7, 6, 5, 4, 3, 2, 1)
+
+    if (s == ascendingList) {
+        println("ascending")
+    } else if (s == descendingList) {
+        println("descending")
+    } else {
+        println("mixed")
+    }
+}
+fun solution2(s: List<Int>): String {
+    var result = ""
+    if (s[0] == s[1] - 1) {
+        result = "ascending"
+    }
+    if (s[0] == s[1] + 1) {
+        result = "descending"
+    }
+    for (i in 2 until s.size - 1) {
+        if (s[i] == s[i + 1] - 1) {
+            result = "ascending"
+        } else if (s[i] == s[i + 1] + 1) {
+            result = "descending"
+        } else {
+            result = "mixed"
+            break
+        }
+    }
+    return result
 }
