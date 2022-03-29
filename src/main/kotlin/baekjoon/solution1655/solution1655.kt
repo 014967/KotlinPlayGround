@@ -25,20 +25,53 @@ fun main() {
     if (n != null) {
         require(n >= 1)
         require(n <= 100000)
+        val maxQueue = PriorityQueue<Int>(reverseOrder())
+        val minQueue = PriorityQueue<Int>()
+        val str = StringBuilder()
+        for (i in 1..n) {
+            val input = readLine()?.toInt()
+            if (input != null) {
+                if (maxQueue.size == minQueue.size) {
+                    maxQueue.offer(input)
+                } else {
+                    minQueue.offer(input)
+                }
+                if (maxQueue.isNotEmpty() && minQueue.isNotEmpty()) {
+                    if (minQueue.peek() < maxQueue.peek()) {
+                        swap(minQueue, maxQueue)
+                    }
+                }
+            }
+            str.append("${maxQueue.peek()}\n")
+        }
+        println(str)
+    }
+}
+
+private fun swap(minQueue: PriorityQueue<Int>, maxQueue: PriorityQueue<Int>) {
+    val minRoot = minQueue.poll()
+    val maxRoot = maxQueue.poll()
+    minQueue.offer(maxRoot)
+    maxQueue.offer(minRoot)
+}
+fun solution() {
+    val n = readLine()?.toInt()
+    if (n != null) {
+        require(n >= 1)
+        require(n <= 100000)
         val minQueue = PriorityQueue<Int>(reverseOrder())
         val maxQueue = PriorityQueue<Int>()
+        val str = StringBuilder()
         for (i in 1..n) {
             val input = readLine()?.toInt()
             if (input != null) {
                 if (i == 1) {
                     minQueue.offer(input)
-                    println(minQueue.peek())
                 } else if (i == 2) {
                     maxQueue.offer(input)
                     if (maxQueue.peek() < minQueue.peek()) {
                         swap(minQueue, maxQueue)
                     }
-                    println(minQueue.peek())
                 } else {
                     if (i % 2 != 0) {
                         // 홀수 번 째 일 때
@@ -51,17 +84,12 @@ fun main() {
                     if (maxQueue.peek() < minQueue.peek()) {
                         swap(minQueue, maxQueue)
                     }
-                    println(minQueue.peek())
                 }
+                str.append("${minQueue.peek()} \n")
             }
         }
+        println(str)
     }
-}
-fun swap(minQueue: PriorityQueue<Int>, maxQueue: PriorityQueue<Int>) {
-    val minRoot = minQueue.poll()
-    val maxRoot = maxQueue.poll()
-    minQueue.offer(maxRoot)
-    maxQueue.offer(minRoot)
 }
 /*
 1  1 -> 1
