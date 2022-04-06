@@ -1,5 +1,7 @@
 package programmers.highscorekit.dfsbfs
 
+import kotlin.math.min
+
 /**
  * @desc
 두 개의 단어 begin, target과 단어의 집합 words가 있습니다.
@@ -28,62 +30,63 @@ fun main() {
     val begin: String = "hit"
     val target: String = "cog"
     val words: Array<String> = arrayOf("hot", "dot", "dog", "lot", "log", "cog")
-    solution(begin, target, words)
+    // solution(begin, target, words)
+    val Solution = Solution()
+    println(Solution.solution(begin, target, words))
 }
-private fun solution(begin: String, target: String, words: Array<String>): Int {
+
+class Solution {
     var answer = Integer.MAX_VALUE
-
-    val check = List<Boolean>(words.size) { false }.toMutableList()
-    for (i in words.indices) { // 모든 단어들을 다 돌아보자.
+    var checkWords: BooleanArray = booleanArrayOf()
+    fun solution(begin: String, target: String, words: Array<String>): Int {
         // 한단어가 선택이 되어서 반영이 되었다면 true로
-        var changeCount = 0
+        // 모든 단어를 첫번째 시작으로 다 돌아보자.그중에 가장 최적인 수를 answer에 넣는다.
 
-        changeCount = dfs(words, i, begin, target, check, changeCount)
-        if (changeCount < answer) {
-            answer = changeCount
+        val change = 0
+        checkWords = BooleanArray(words.size)
+        dfs(words, begin, target, change) // words의 인덱스별로 탐색을 한다. begin과 target도 넘긴다.
+
+        if (answer == Integer.MAX_VALUE) {
+            answer = 0
         }
+        return answer
     }
-    return answer
-}
-private fun dfs(
-    words: Array<String>,
-    index: Int,
-    begin: String,
-    target: String,
-    check: MutableList<Boolean>,
-    changeCount: Int
-): Int {
-    var count = 0
-    var chCount = changeCount
-    var targetCount = 0
-    for (i in target.indices) {
-        if (begin[i] != target[i]) { // begin으로 바로 cog로 갈수 있니?
-            targetCount++
+    private fun dfs(
+        words: Array<String>, // 단어 목록
+        begin: String, // 시작값 hit 고정
+        target: String, // 타겟값 cog 고정
+        change: Int,
+
+    ) { // 우리가 반환하고나 하는 것은 단어를 몇개를 변환해서 도착했는가 이다.
+
+        // begin 은 변하면 안될 것 같고 현재의 단어를 저장하는 변수를 선언하자. > currentWord
+        // 재귀로 갈꺼니까 종료조건을 일단 말하자.
+
+        if (begin == target) {
+            answer = min(answer, change)
         }
-    }
-    if (targetCount == 1) { // 갈수 있어
-        return chCount++
-    }
-    for (i in begin.indices) {
-        if (begin[i] != words[index][i])
-            count++ // 비교하려는 문자열과 words의 문자열을 확인해본다.
-    }
-    if (count == 1) {
-        check[index] = true // 하나의 문자열만 다르다면 해당으로 이동하자.
-        val start = words[index]
-        chCount++
-        words.forEachIndexed { idx, word ->
-            if (!check[idx]) {
-                // begin은 이동한 문자.
-                dfs(words, idx, start, target, check, chCount)
+        // for문을 돌아가면서 1개의 단어변경으로 만들 수 있는 단어를 찾는다.
+
+        for (i in words.indices) {
+
+            if (!checkWords[i] && checkDiff(begin, words[i])) {
+                // 탐색을 하지 않았던 워드라면 해당하는 단어로 깊은 탐색을 해야할 것 같음
+                checkWords[i] = true // 탐색한거로 바꾸자.
+                dfs(words, words[i], target, change + 1)
+                checkWords[i] = false
             }
         }
-    } else {
-        dfs(words, index + 1, begin, target, check, chCount)
     }
-    return 0
+    private fun checkDiff(str1: String, str2: String): Boolean {
+        var count = 0
+        for (i in str1.indices) {
+            if (str1[i] != str2[i]) {
+                count++
+            }
+        }
+        if (count == 1) {
+            return true
+        }
+        return false
+    }
 }
-
-/*
-모든 word를 돈다.
- */
