@@ -50,6 +50,7 @@ fun optimalSolution(numbers: IntArray, target: Int): Int {
         list.run {
             map { it + i } + map { it - i }
         }
-    }.count{ it== target
+    }.count {
+        it == target
     }
 }
