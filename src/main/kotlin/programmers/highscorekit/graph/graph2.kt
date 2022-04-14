@@ -27,4 +27,51 @@ n	results	return
 
 fun main() {
     // dfs를 돌면서 모든 노드를 갈 수 있느냐를 볼 수 있으면 될려나
+    val n = 5
+    val results = arrayOf(intArrayOf(4, 3), intArrayOf(4, 2), intArrayOf(3, 2), intArrayOf(1, 2), intArrayOf(2, 5))
+    val graph2Solution = Graph2Solution()
+    println(graph2Solution.solution(n, results))
 }
+class Graph2Solution {
+    fun solution(n: Int, results: Array<IntArray>): Int {
+        var answer = 0
+        require(n in 1..100)
+        require(results.size in 1..4500)
+        val boxerArrList = Array(n + 1) { Array(n + 1) { 10000 } }
+
+        for (i in results.indices) {
+            val start = results[i][0]
+            val end = results[i][1]
+            boxerArrList[start][end] = 1
+        }
+        for (d in 1..n) {
+            // 거쳐가는 노드
+            for (i in 1..n) {
+                // 출발 노드
+                for (j in 1..n) {
+                    // 도착 노드
+                    if (boxerArrList[i][j] > boxerArrList[i][d] + boxerArrList[d][j]) {
+                        boxerArrList[i][j] = boxerArrList[i][d] + boxerArrList[d][j]
+                    }
+                }
+            }
+        }
+        for (i in 1 until boxerArrList.size) {
+            var count = 0
+            for (j in 1 until boxerArrList[i].size) {
+                if (boxerArrList[i][j] < 10000 || boxerArrList[j][i] < 10000) {
+                    count ++
+                }
+            }
+            if (count == n - 1) {
+                answer++
+            }
+        }
+
+        return answer
+    }
+}
+/*
+
+
+ */
