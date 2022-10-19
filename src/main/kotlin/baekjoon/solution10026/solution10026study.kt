@@ -14,52 +14,55 @@ import java.io.InputStreamReader
  *
  */
 
-val dt = intArrayOf(-1, 1, 0, 0)
-val dr = intArrayOf(0, 0, 1, -1)
+val dx = listOf(0, 0, -1, 1)
+val dy = listOf(1, -1, 0, 0)
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
     val n = readLine().toInt()
-
     val arr = Array(n) { Array(n) { 'a' } }
-    val checked = Array(n) { BooleanArray(n) { false } }
-    val checked2 = Array(n) { BooleanArray(n) { false } }
+    val check = Array(n) { BooleanArray(n) { false } }
+    val checkRG = Array(n) { BooleanArray(n) { false } }
     for (i in 0 until n) {
-        val str = readLine()
+        var str = readLine().toString()
         for (j in str.indices) {
             arr[i][j] = str[j]
         }
     }
+
+    var countNone = 0
     var count = 0
-    var count2 = 0
     for (i in arr.indices) {
         for (j in arr[i].indices) {
-            if (!checked[i][j]) {
-                if (arr[i][j] == 'B') {
-                    dfsB(arr, checked, i, j)
-                    count++
-                } else {
-                    dfsRG(arr, checked, i, j)
-                    count++
-                }
-            }
-            if (!checked2[i][j]) {
+            if (!check[i][j]) {
                 when (arr[i][j]) {
                     'B' -> {
-                        dfsB(arr, checked2, i, j)
-                        count2++
+                        dfsB(arr, check, i, j)
+                        countNone++
                     }
                     'R' -> {
-                        dfsR(arr, checked2, i, j)
-                        count2++
+                        dfsR(arr, check, i, j)
+                        countNone++
                     }
                     'G' -> {
-                        dfsG(arr, checked2, i, j)
-                        count2++
+                        dfsG(arr, check, i, j)
+                        countNone++
                     }
                 }
             }
+            if (!checkRG[i][j])
+                if (arr[i][j] == 'B') {
+                    dfsB(arr, checkRG, i, j)
+                    count++
+                } else {
+                    dfsRG(arr, checkRG, i, j)
+                    count++
+                }
         }
     }
-    println("$count2 $count")
+    print(countNone)
+    print(" ")
+    print(count)
+
+
 }
 
 private fun dfsB(arr: Array<Array<Char>>, checked: Array<BooleanArray>, i: Int, j: Int) {
@@ -116,3 +119,4 @@ private fun dfsG(arr: Array<Array<Char>>, checked: Array<BooleanArray>, i: Int, 
         }
     }
 }
+

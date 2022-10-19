@@ -14,8 +14,8 @@ import java.io.InputStreamReader
  *
  */
 
-val dx = intArrayOf(0, 0, 1, -1)
-val dy = intArrayOf(1, -1, 0, 0)
+private val dx = intArrayOf(0, 0, 1, -1)
+private val dy = intArrayOf(1, -1, 0, 0)
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
     val t = readLine().toInt()
 
@@ -51,7 +51,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
     }
 }
 
-fun dfs(arr: Array<Array<Int>>, checked: Array<BooleanArray>, i: Int, j: Int): Int {
+private fun dfs(arr: Array<Array<Int>>, checked: Array<BooleanArray>, i: Int, j: Int): Int {
 
     var count = 1
     checked[i][j] = true

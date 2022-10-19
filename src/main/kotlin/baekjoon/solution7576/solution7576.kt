@@ -49,7 +49,6 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
     }
 
     val check = Array(m) { BooleanArray(n) { false } }
-    val countArr = Array(m) { Array(n) { 0 } }
     var dayCount = 1
 
     val tempQueue = LinkedList<Pair<Int, Int>>()
@@ -68,7 +67,6 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
             if (x in arr.indices && y in arr[0].indices && arr[x][y] == 0 && !check[x][y]) {
                 // tempQueue를 만들어서 0인 토마토를 넣는다.
                 tempQueue.offer(Pair(x, y))
-                countArr[x][y] = dayCount
                 check[x][y] = true
             }
         }
