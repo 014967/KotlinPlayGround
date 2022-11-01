@@ -33,8 +33,8 @@ class Solution {
         )
         s.forEach { answer.append(it) }
         if (answer.none {
-                it != '0'
-            }
+            it != '0'
+        }
         ) {
             answer.clear()
             answer.append('0')

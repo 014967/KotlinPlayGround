@@ -16,10 +16,9 @@ import kotlin.math.min
 
 fun main() {
     val solution = Solution()
-    val list = listOf("O")
+    val list = listOf("JEROEN","JAN")
     list.forEach {
-        solution.solution(it)
-        println(solution.getUpDownCount(it[0]))
+        println(solution.solution(it))
     }
 }
 class Solution {
@@ -34,12 +33,11 @@ class Solution {
 
         for (i in name.indices) {
             answer += getUpDownCount(name[i]) // 일단 위아래 다 더하기
-            var move = 0
-            val next = i + 1
-            while (next < name.length && name[next] != 'A') {
-                move++
+            var next = i + 1
+            while (next < name.length && name[next] == 'A') {
+                next++
             }
-            minRightLeft = min(minRightLeft , i * 2 + )
+            minRightLeft = min(minRightLeft, i * 2 + name.length - next)
         }
 
         return answer
