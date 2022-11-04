@@ -24,30 +24,39 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
         arr[i] = x
     }
     arr.sort()
-    search(arr, 0, 1000000001, C)
+    val low = 1
+    val high = 1000000001
+    search(arr, low, high, C)
 }
 fun search(arr: Array<Int>, low: Int, high: Int, c: Int) {
     var low = low
     var high = high
-    while (low <= high) {
+    while (low + 1 < high) {
         val mid = (low + high) / 2 // 인접한 두 거리
         var count = 1
-        for (i in 1 until arr.size) { // 집의 갯수가 2개 이상
-            val length = arr[i] - arr[i - 1]
-            if(length < mid){
+        var prev = arr[0]
+        for (i in 1 until arr.size) {
+            if (arr[i] - prev >= mid) {
                 count++
+                prev = arr[i]
             }
         }
-        if(count >=c){
-            low = mid + 1
-        }else{
-            high = mid - 1
-        }
 
+        if (count < c) {
+            high = mid
+        } else {
+            // cont >= c
+            low = mid
+        }
     }
     println(low)
 }
 /*
+1 - 2 - 4 - 8 - 9
+1   1   1   1   1
+2   0   2   2   2
+3   0
+
 집 N개가 수직선위에 있다. 각각 다른 좌표다.
 공유기 C개를 설치하려고한다.
 최대한 많은 곳에서 와이파이를 사용하려고함.

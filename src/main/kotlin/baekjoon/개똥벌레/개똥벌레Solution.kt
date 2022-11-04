@@ -47,18 +47,21 @@ fun main(): Unit = with(BufferedReader(InputStreamReader(System.`in`))) {
 fun search(arr: ArrayList<Int>, target: Double, low: Int, high: Int): Int {
     var low = low
     var high = high
-    while (low <= high) {
+    while (low < high) {
         val mid = (low + high) / 2
         if (arr[mid] < target) {
             low = mid + 1
         } else {
-            high = mid - 1
+            high = mid
         }
     }
-    return low
+    return high
 }
 /*
 lower bound = 찾고자 하는 값 이상이 처음 나타나는 위치.
 찾고자 하는 값 이상의 값이 처음 나타나는 위치를 찾아내기 위해 이분 탐색에서 조건을 변경
+
+종유석과 석순을 따로 정렬을 함.
+첫번째에서 걸리면 뒤까지 볼 필요가 없다. lower bound로 해야함. 첫번째로 걸리는 값까지
 
  */
