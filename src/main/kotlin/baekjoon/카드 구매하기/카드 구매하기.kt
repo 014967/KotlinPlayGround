@@ -29,9 +29,8 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
                     val less = i / j
                     dp[i] = dp[i].coerceAtLeast(dp[j] * less)
                 }
-                dp[i] = dp[i].coerceAtLeast(dp[j] + dp[i-j])
+                dp[i] = dp[i].coerceAtLeast(dp[j] + dp[i - j])
             }
-
 
             dp[i] = maxOf(dp[i], dp[1] * i, dp[i - 1] + dp[1])
         }
