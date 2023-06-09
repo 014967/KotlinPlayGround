@@ -22,11 +22,15 @@ fun main() {
 }
 class Trie() {
 
-    val treeNode = TreeNode(' ')
-    class TreeNode(val `val`: Char) {
-        val set: HashSet<TreeNode> = HashSet()
+    val treeNode = TreeNode()
+    var flag = true
+
+    val arr = HashMap<String, String>()
+    class TreeNode {
+        val set: HashMap<Char, TreeNode?> = HashMap()
     }
     fun insert(word: String) {
+        arr[word] = word
         insertWithTree(word, treeNode)
     }
 
@@ -37,19 +41,49 @@ class Trie() {
         if (treeNode == null) {
             return
         }
-        if (treeNode.set.indexOf(TreeNode(word[0])) == -1) {
-            treeNode.set.add(TreeNode(word[0]))
-            insertWithTree(word.substring(1, word.length), treeNode.set.first())
+
+        if (treeNode.set.containsKey(word[0])) {
+            val newNode = treeNode.set[word[0]]!!
+            insertWithTree(treeNode = newNode, word = word.drop(1))
         } else {
+            treeNode.set[word[0]] = TreeNode()
+            val newTreeNode = treeNode.set[word[0]]
+            insertWithTree(treeNode = newTreeNode, word = word.drop(1))
         }
     }
 
     fun search(word: String): Boolean {
-        return true
+        return arr.containsKey(word)
+    }
+
+    private fun searchWithNode(word: String, copyNode: TreeNode) {
+        if (word.isEmpty()) {
+            return
+        }
+        if (!flag) {
+            return
+        }
+        if (copyNode.set.containsKey(word[0])) {
+            searchWithNode(copyNode = copyNode.set[word[0]]!!, word = word.drop(1))
+        } else {
+            flag = false
+        }
     }
 
     fun startsWith(prefix: String): Boolean {
-        return true
+        val copyNode = treeNode
+
+        if (copyNode.set.containsKey(prefix[0])) {
+            searchWithNode(copyNode = copyNode.set[prefix[0]]!!, word = prefix.drop(1))
+        } else {
+            flag = false
+        }
+
+        var result = true
+        result = flag
+
+        flag = true
+        return result
     }
 }
 

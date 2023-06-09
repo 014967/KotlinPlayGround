@@ -76,7 +76,7 @@ array[2] 를 봤는데 이미 1이 들어가있네? 근데 ramen이 더큼
 교체함
 array[2] = 5
 
-for ramen 4인값에는 array[2] = 5가 있으니까
+for ramen 4인값에는 array[2w] = 5가 있으니까
 1에 넣어줌
 array[1] = 4
 
