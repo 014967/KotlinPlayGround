@@ -1,4 +1,4 @@
-package leetcode.`Implement-trie-prefix-tre`
+package leetcode.DesignAddAndSearchWordsDataStructure
 
 /**
  * @desc
@@ -12,25 +12,40 @@ package leetcode.`Implement-trie-prefix-tre`
  */
 
 fun main() {
-    val trie = Trie()
-    trie.insert("apple")
-    println(trie.search("apple"))
-    println(trie.search("app"))
-    println(trie.startsWith("app"))
-    trie.insert("app")
-    println(trie.search("app"))
+    val wordDictionary = WordDictionary()
+    wordDictionary.addWord("a")
+    wordDictionary.addWord("ab")
+    println(wordDictionary.search("a"))
+    println(wordDictionary.search("a."))
+    println(wordDictionary.search("ab"))
+    println(wordDictionary.search(".a"))
+    println(wordDictionary.search(".b"))
+    println(wordDictionary.search("ab."))
+    println(wordDictionary.search("."))
+    println(wordDictionary.search(".."))
 }
+
+class WordDictionary() {
+
+    val trie = Trie()
+    fun addWord(word: String) {
+        trie.insert(word)
+    }
+
+    fun search(word: String): Boolean {
+        return trie.search(word)
+    }
+}
+
 class Trie() {
 
     val treeNode = TreeNode()
     var flag = true
 
-    val arr = HashMap<String, String>()
     class TreeNode {
         val set: HashMap<Char, Pair<Boolean, TreeNode?>> = HashMap()
     }
     fun insert(word: String) {
-        arr[word] = word
         insertWithTree(word, treeNode)
     }
 
@@ -43,21 +58,32 @@ class Trie() {
         }
 
         if (treeNode.set.containsKey(word[0])) {
+            treeNode.set['.'] = Pair(true, TreeNode())
+            val anyNewNode = treeNode.set['.']
+
             val newNode = treeNode.set[word[0]]!!.second
             val newWord = word.drop(1)
             if (newWord.isEmpty()) {
+                treeNode.set['.'] = treeNode.set['.']!!.copy(true)
                 treeNode.set[word[0]] = treeNode.set[word[0]]!!.copy(first = true)
             } else {
+                insertWithTree(treeNode = anyNewNode?.second, word = newWord)
                 insertWithTree(treeNode = newNode, word = newWord)
             }
         } else {
             treeNode.set[word[0]] = Pair(false, TreeNode())
+
+            treeNode.set['.'] = Pair(false, TreeNode())
+            val anyNewNode = treeNode.set['.']
+
             val newTreeNode = treeNode.set[word[0]]
             val newWord = word.drop(1)
             if (newWord.isEmpty()) {
+                treeNode.set['.'] = treeNode.set['.']!!.copy(first = true)
                 treeNode.set[word[0]] = treeNode.set[word[0]]!!.copy(first = true)
             } else {
                 insertWithTree(treeNode = newTreeNode?.second, word = newWord)
+                insertWithTree(treeNode = anyNewNode?.second, word = newWord)
             }
         }
     }
@@ -105,28 +131,4 @@ class Trie() {
             flag = false
         }
     }
-
-    fun startsWith(prefix: String): Boolean {
-        val copyNode = treeNode
-
-        if (copyNode.set.containsKey(prefix[0])) {
-            searchStartWithNode(copyNode = copyNode.set[prefix[0]]!!.second!!, word = prefix.drop(1))
-        } else {
-            flag = false
-        }
-
-        var result = true
-        result = flag
-
-        flag = true
-        return result
-    }
 }
-
-/**
- * Your Trie object will be instantiated and called as such:
- * var obj = Trie()
- * obj.insert(word)
- * var param_2 = obj.search(word)
- * var param_3 = obj.startsWith(prefix)
- */
