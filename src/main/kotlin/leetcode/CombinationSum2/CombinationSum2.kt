@@ -12,45 +12,64 @@ package leetcode.CombinationSum2
  */
 
 fun main() {
-    val candidates = intArrayOf(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)
-    val target = 30
+    val candidates = intArrayOf(10, 1, 2, 7, 6, 1, 5)
+    val target = 8
     val sol = Solution()
 
     println(sol.combinationSum2(candidates, target))
 }
 class Solution {
     lateinit var result: MutableSet<ArrayList<Int>>
-    lateinit var checker: BooleanArray
     fun combinationSum2(candidates: IntArray, target: Int): List<List<Int>> {
-        checker = BooleanArray(51) { false }
-        val sortedCandidates = candidates.sortedArray()
+        val sortedCandidates = ArrayList(
+            candidates.sortedArray().groupBy {
+                it
+            }.map {
+                Pair(it.key, it.value.count())
+            }
+        )
         result = mutableSetOf()
 
         for (i in sortedCandidates.indices) {
-            if (checker[sortedCandidates[i]]) {
-                continue
-            }
-            checker[sortedCandidates[i]] = true
-            getComb(sortedCandidates, target, arrayListOf(sortedCandidates[i]), i + 1)
+            combination(sortedCandidates, i, arrayListOf(), target)
         }
 
         return result.toList()
     }
-    fun getComb(candidates: IntArray, target: Int, currentList: ArrayList<Int>, index: Int) {
-        val sum = currentList.sum()
+
+    fun combination(
+        sortedCandidates: ArrayList<Pair<Int, Int>>,
+        index: Int,
+        temp: ArrayList<Int>,
+        target: Int
+    ) {
+        val sum = temp.sum()
+        if (sum == target) {
+            result.add(ArrayList(temp))
+            return
+        }
 
         if (sum > target) {
             return
         }
 
-        if (sum == target) {
-            result.add(currentList)
-        }
-
-        for (i in index until candidates.size) {
-            val temp = ArrayList(currentList)
-            temp.add(candidates[i])
-            getComb(candidates, target, temp, i + 1)
+        for (i in index until sortedCandidates.size) {
+            val count = sortedCandidates[index].second
+            if (count <= 0) {
+                continue
+            }
+            val current = sortedCandidates[index].first
+            sortedCandidates[index] = sortedCandidates[index].copy(second = count - 1)
+            temp.add(current)
+            combination(
+                sortedCandidates,
+                i,
+                temp,
+                target
+            )
+            val lastIndex = temp.size - 1
+            temp.removeAt(lastIndex)
+            sortedCandidates[index] = sortedCandidates[index].copy(second = count)
         }
     }
 }
