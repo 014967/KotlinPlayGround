@@ -26,7 +26,7 @@ val numberList = listOf("1", "2", "3")
 fun dfs(length: Int, depth: Int) {
     if (result.length >= 2) {
         var isSame = false
-        for (i in 1 .. result.length / 2) {
+        for (i in 1..result.length / 2) {
             val left = result.substring(result.length - 2 * i, result.length - i)
             val right = result.substring(result.length - i, result.length)
             if (left == right) {
