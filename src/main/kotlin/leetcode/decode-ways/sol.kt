@@ -20,40 +20,20 @@ fun main() {
 
 class Solution {
     fun numDecodings(s: String): Int {
-        if (s.startsWith("0")) {
-            return 0
+        val n = s.length
+        val dp = IntArray(n + 1)
+        dp[0] = 1
+        dp[1] = if (s[0] != '0') 1 else 0
+        for (i in 2..n) {
+            val first = Integer.valueOf(s.substring(i - 1, i))
+            val second = Integer.valueOf(s.substring(i - 2, i))
+            if (first in 1..9) {
+                dp[i] += dp[i - 1]
+            }
+            if (second in 10..26) {
+                dp[i] += dp[i - 2]
+            }
         }
-        return 0
-    }
-
-    fun mapping(s: String): String {
-        return when (s) {
-            "1" -> "A"
-            "2" -> "B"
-            "3" -> "C"
-            "4" -> "D"
-            "5" -> "E"
-            "6" -> "F"
-            "7" -> "G"
-            "8" -> "H"
-            "9" -> "I"
-            "10" -> "J"
-            "11" -> "K"
-            "12" -> "L"
-            "13" -> "N"
-            "14" -> "M"
-            "15" -> "O"
-            "16" -> "P"
-            "17" -> "Q"
-            "18" -> "R"
-            "19" -> "S"
-            "20" -> "T"
-            "21" -> "U"
-            "22" -> "V"
-            "23" -> "W"
-            "24" -> "X"
-            "25" -> "Y"
-            else -> "Z"
-        }
+        return dp[n]
     }
 }
